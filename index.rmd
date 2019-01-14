@@ -1,29 +1,227 @@
----
----
+#Practical machine learning project
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+##Introduction
+
+The process of creating a model to determine the classes of the excercises went through several processes:
+
+  1) Data cleaning - ensured the data was ready for analysis
+  2) Data analysis - used a combination of predictive models to determine the classe of excerise
+  
+There are two process that are used in this project that were not covered in the notes: factor analysis and data fusion. They were discussed whilst reading further on machine learning.
+  
+
+##Data cleaning
+
+The data cleaning stage was informed by exploring the data. From the exploration stage it was clear that many of the columns were blank. These were removed from both the testing and training data. Additionally it was found that some rows contained variable observations that the majority of other rows did not. It was identified that these columns/variables were not used in the training dataset and would therefore not be needed in the training dataset either. They were removed from the dataset.
+
+The first seven columns were also removed from the data set as they were found to have no correlation with classe.  
+
+The variance inflation factor (vif) was then used, as a preffered approach to correlation scores, to detect multicollinearity. Correlated variables could weight certain traits of an excercise above other equally important variables. These variables were removed had been removed THe data was then centred and scaled to produce z-scores which allowed for the normalisation of the data. This led to more accurate results within the non-parametic tests used for this project which assumed a normative distribution in the data. 
+
+The process then went through a simplification process. The user was allowed to choose either PCA or factor analysis. Whilst both lower the accuracy of the model on a limited capacity computer such as the one this model was written on it allows for more observations to be analysed in a reasonable time frame. For this project factor analysis was used as it was found to provide the most accurate results. If the computing power had been available no simplification process would have been used as this was found to produce even more accurate results.
+
+The factor analysis which aims to find the variables for hidden features (classes) was set to find 5 classes, the number of distinct classes in the training set. Checks on higher numbers of factors and their explanatory variance did find however that there was an argument to increasing the number of factors. The number of factors was kept at five however as they explained a significant proportion of the variance whilst  not being too large. A similar decision was made with keeping the total count of PCAs at 19.
+
+
+##Data analysis
+
+Random forest, knn and data fusion were the supervised classification techniques used to predict classe. Boosting would also have been used though was too resource intensive an operation for my computer. Data fusion is a technique not covered in the class, but it was found to be an effective predictor, especially on smaller sample sizes. The default distance measure it uses to classify results,'Manhattan' was used as studies have shown other types have minimal effect on outcomes. 
+
+The predictive models were then combined for a final predictive algorithm. This required transforming the results of the predictive model to dummy variables so they could be used as independent predictors. The model would have been unable to work if it had used the original, nominal classe letters.
+
+Cross validation was used in the packages where the trainControl function could be used. This meant that cross validation could be used for all models except the data fusion technique and including the end combination of models. K-folds cross validation was selected and k=2. K was set to 3 as even this would push the capability of my machine whilst minimising the risk of over fitting the model.
+
+To determine an out of sample error rate the training data set was split into a training, testing and combination. This approach meant that training data had data it could be tested on (the testing data set) and the final combination of models could also have it's prediction tested (using the combination data set) in a confusion matrix.
+
+The next section is a copy of the script used to calculate the out of sample error.
+
+For the final run of the model the code was adapted so that all training data was used to calculate the model. A copy of this script has not been included here as it only slightly differs from the below code.
+
+
+##Script to calculate out of sample error
+
+
+```{r}
+
+library(caret)
+library(outliers)
+
+trainingMin = 0
+trainingMax = 5000
+predictionMin = 5001
+predictionMax = 10000
+combinationMin = 10001
+combinationMax = 15000
+
+
+#-------- data load
+
+training <- read.csv("C:\\Users\\rhart\\OneDrive\\Documents\\DataPracticalMachineLearning\\FinalTrain.csv")
+testing <- read.csv("C:\\Users\\rhart\\OneDrive\\Documents\\DataPracticalMachineLearning\\FinalTest.csv")
+discountColumns = c(1:7)
+discountColumnsIncludingClasse = c(1:7,60)
+predictionTesting = subset(testing, select =-discountColumns)
+trainingNonIndependents = subset(training, select=-discountColumns)
+trainingWithoutNonIndependentsAndClasse = subset(training, select=-discountColumnsIncludingClasse)
+testingNonIndependents = subset(testing, select=-discountColumns)
+testingWithoutNonIndependentsAndClasse = subset(testing, select=-discountColumnsIncludingClasse)
+train_control<- trainControl(method="cv", number=2, savePredictions = TRUE)
+
+
+
+#-------- cleaning
+
+#non multicollinearity cleaning
+library(usdm)
+vf = vifstep(trainingWithoutNonIndependentsAndClasse, th = 10)
+trainingWithoutNonIndependentsOrClasseCollinearity = exclude(trainingWithoutNonIndependentsAndClasse, vf)
+
+#standardisation of nonmulticollinearity data
+standardised = preProcess(trainingWithoutNonIndependentsOrClasseCollinearity, method =c("center", "scale"))
+standardisedTrain = predict(standardised, trainingWithoutNonIndependentsOrClasseCollinearity)
+originalSTNames = colnames(standardisedTrain)
+standardisedTrain = mapply(rm.outlier,  fill = TRUE, standardisedTrain)
+mode(standardisedTrain) = "numeric"
+standardisedTrain = data.frame(standardisedTrain)
+colnames(standardisedTrain) = originalSTNames
+standardisedTrain$classe = training$classe
+standardisedTrainWithoutClasse = subset(standardisedTrain, select =-ncol(standardisedTrain))
+
+
+#------- cleaning extension (factor analysis)
+
+  factorAnalysisCleaning <- function()
+  {
+      standardised = preProcess(trainingWithoutNonIndependentsOrClasseCollinearity, method =c("center", "scale"))
+      standardisedTrain = predict(standardised, trainingWithoutNonIndependentsOrClasseCollinearity)
+      attempt2 = princomp(standardisedTrain)
+      attempt1 = princomp(trainingWithoutNonIndependentsAndClasse)
+      factorAnalysis = factanal(x = standardisedTrain, factors = 5, rotation = "promax")
+      factorAnalysisResults = factanal(trainingWithoutNonIndependentsOrClasseCollinearity, factors = 5, rotation = "promax", scores = "regression")
+      standardisedTrain = data.frame(factorAnalysisResults$scores)
+      standardisedTrain$classe = training$classe
+      standardisedTrainWithoutClasse = subset(standardisedTrain, select =-ncol(standardisedTrain))
+      return (standardisedTrain)
+  }
+  
+  
+#----- cleaning extension (pca)
+  
+  pcaCleaning <- function()
+    {
+      preProc = preProcess(standardisedTrainWithoutClasse, method="pca", pcaComp=10)
+      trainPC = predict(preProc, standardisedTrainWithoutClasse)
+      standardisedTrain = data.frame(trainPC)
+      standardisedTrain$classe = training$classe
+      return (standardisedTrain)
+  }
+  
 ```
 
-## R Markdown
+The following code section allows the user to select whether they would like the model to run the cleaning with either a PCA or Factor analysis process. 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+possibleCleaningChoices <- c("PCA","Factor analysis","None")
+i <- menu(possibleCleaningChoices, graphics=TRUE, title="Choose cleaning type")
 
-```{r cars}
-summary(cars)
+```{r}  
+
+i = 3
+
+if ( i == 1) {
+  standardisedTrain = pcaCleaning()
+  standardisedTrainWithoutClasse = subset(standardisedTrain, select =-ncol(standardisedTrain))
+  }
+if ( i == 2) {
+  standardisedTrain = factorAnalysisCleaning()
+  standardisedTrainWithoutClasse = subset(standardisedTrain, select =-ncol(standardisedTrain))
+}
+
+
+#-- random forest
+
+modelFitRF = train(x=standardisedTrainWithoutClasse[trainingMin:trainingMax,], y=standardisedTrain[trainingMin:trainingMax,]$classe, trControl=train_control, method ="rf")
+rfPrediction = predict(modelFitRF, standardisedTrainWithoutClasse[predictionMin:predictionMax,])
+confusionMatrix(standardisedTrain[predictionMin:predictionMax,]$classe, rfPrediction)
+
+
+#-- knn
+
+knnTrain = train(standardisedTrainWithoutClasse[trainingMin:trainingMax,], standardisedTrain[trainingMin:trainingMax,]$classe,trControl=train_control,  method='knn')
+knnPrediction = predict(object=knnTrain,standardisedTrainWithoutClasse[predictionMin:predictionMax,])
+confusionMatrix(knnPrediction,standardisedTrain[predictionMin:predictionMax,]$classe)
+
+
+#--boosting
+# 
+# modFit = train(classe ~., method = "gbm", data = standardisedTrain[trainingMin:trainingMax,], verbose = FALSE)
+# boostingPrediction = predict(modFit,standardisedTrainWithoutClasse[predictionMin:predictionMax,])
+# confusionMatrix(boostingPrediction,standardisedTrain[predictionMin:predictionMax,]$classe)
+
+
+#--data fusion
+
+library(StatMatch)
+rec <- standardisedTrainWithoutClasse[predictionMin:predictionMax,]
+rec$Classe = NA
+rec <- subset(rec,is.na(Classe), select=-Classe)
+don <- standardisedTrain[trainingMin:trainingMax,]
+colnames(don)[ncol(don)] <- "Classe"
+aframe = data.frame(colnames(standardisedTrain))
+aframe = aframe[-nrow(aframe),]
+X.mtc <- as.vector(aframe)
+nnd = NND.hotdeck(data.rec=rec, data.don=don, match.vars=X.mtc, don.class=NULL, dist.fun="Manhattan")
+imp.rec <- create.fused(data.rec=rec, data.don=don, mtc.ids=nnd$mtc.ids, z.vars="Classe")
+imp.rec$imp.PL <- 1
+
+# step 3) re-aggregate data sets
+  don$imp.PL <- 0
+imp.rec <- rbind(imp.rec, don)
+tapply(imp.rec$Classe, imp.rec$imp.PL, summary)
+confusionMatrix(imp.rec[imp.rec$imp.PL ==  1,]$Classe,standardisedTrain[predictionMin:predictionMax,]$classe)
+dataFusionResults = imp.rec[imp.rec$imp.PL ==  1,]$Classe
+
+
+#-----combination of predictive models
+
+library(fastDummies)
+#boostingOrigianlPredDummies = dummy_cols(boostingPrediction)[,-1]
+knnOrigianlPredDummies = dummy_cols(knnPrediction)[,-1]
+rfOrigianlPredDummies = dummy_cols(rfPrediction)[,-1]
+dfOrigianlPredDummies = dummy_cols(dataFusionResults)[,-1]
+#colnames(boostingOrigianlPredDummies) = paste(colnames(boostingOrigianlPredDummies), "boosting", sep = "_")
+colnames(knnOrigianlPredDummies) = paste(colnames(knnOrigianlPredDummies), "knn", sep = "_")
+colnames(rfOrigianlPredDummies) = paste(colnames(rfOrigianlPredDummies), "rf", sep = "_")
+colnames(dfOrigianlPredDummies) = paste(colnames(dfOrigianlPredDummies), "df", sep = "_")
+preDF = data.frame(dfOrigianlPredDummies, rfOrigianlPredDummies, classe = standardisedTrain[predictionMin:predictionMax, "classe"])
+combFit = train(classe ~., method = "rf", data=preDF, trControl=train_control, verbose = FALSE)
+
 ```
 
-## Including Plots
+This was the end of the code for the 
 
-You can also embed plots, for example:
+```{r}  
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+#boostingPrediction2 = dummy_cols(predict(modFit,standardisedTrainWithoutClasse[combinationMin:combinationMax,]))[,-1]
+knnPrediction2 = dummy_cols(predict(knnTrain,standardisedTrainWithoutClasse[combinationMin:combinationMax,]))[,-1]
+rfPrediction2 = dummy_cols(predict(modelFitRF, standardisedTrainWithoutClasse[combinationMin:combinationMax,]))[,-1]
+rec <- standardisedTrainWithoutClasse[combinationMin:combinationMax,]
+rec$Classe = NA
+rec <- subset(rec,is.na(Classe), select=-Classe)
+nnd = NND.hotdeck(data.rec=rec, data.don=don, match.vars=X.mtc, don.class=NULL, dist.fun="Manhattan")
+imp.rec <- create.fused(data.rec=rec, data.don=don, mtc.ids=nnd$mtc.ids, z.vars="Classe")
+imp.rec$imp.PL <- 1
+dfPrediction2 = dummy_cols(imp.rec[imp.rec$imp.PL ==  1,]$Classe)[,-1]
+#colnames(boostingPrediction2) = paste(colnames(boostingPrediction2), "boosting", sep = "_")
+colnames(knnPrediction2) =  paste(colnames(knnPrediction2), "knn", sep = "_")
+colnames(rfPrediction2) =  paste(colnames(rfPrediction2), "rf", sep = "_")
+colnames(dfPrediction2) =  paste(colnames(dfPrediction2), "df", sep = "_")
+preDF2 = data.frame(rfPrediction2, dfPrediction2 )
+combPred = predict(combFit, preDF2)
+confusionMatrix(combPred,standardisedTrain[combinationMin:combinationMax,]$classe)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 
 
