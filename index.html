@@ -191,29 +191,28 @@ $(document).ready(function () {
 <h1>Practical machine learning project</h1>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The process of creating a model to determine the classes of the excercises went through several processes:</p>
+<p>The process of creating a model to determine the classes of the exercises went through two main processes:</p>
 <ol style="list-style-type: decimal">
 <li>Data cleaning - ensured the data was ready for analysis</li>
-<li>Data analysis - used a combination of predictive models to determine the classe of excerise</li>
+<li>Data analysis - used a combination of predictive models to determine the classe of an excerise</li>
 </ol>
 <p>There are two process that are used in this project that were not covered in the notes: factor analysis and data fusion. They were discussed whilst reading further on machine learning.</p>
 </div>
 <div id="data-cleaning" class="section level2">
 <h2>Data cleaning</h2>
-<p>The data cleaning stage was informed by exploring the data. From the exploration stage it was clear that many of the columns were blank. These were removed from both the testing and training data. Additionally it was found that some rows contained variable observations that the majority of other rows did not. It was identified that these columns/variables were not used in the training dataset and would therefore not be needed in the training dataset either. They were removed from the dataset.</p>
-<p>The first seven columns were also removed from the data set as they were found to have no correlation with classe.</p>
-<p>The variance inflation factor (vif) was then used, as a preffered approach to correlation scores, to detect multicollinearity. Correlated variables could weight certain traits of an excercise above other equally important variables. These variables were removed had been removed THe data was then centred and scaled to produce z-scores which allowed for the normalisation of the data. This led to more accurate results within the non-parametic tests used for this project which assumed a normative distribution in the data.</p>
-<p>The process then went through a simplification process. The user was allowed to choose either PCA or factor analysis. Whilst both lower the accuracy of the model on a limited capacity computer such as the one this model was written on it allows for more observations to be analysed in a reasonable time frame. For this project factor analysis was used as it was found to provide the most accurate results. If the computing power had been available no simplification process would have been used as this was found to produce even more accurate results.</p>
-<p>The factor analysis which aims to find the variables for hidden features (classes) was set to find 5 classes, the number of distinct classes in the training set. Checks on higher numbers of factors and their explanatory variance did find however that there was an argument to increasing the number of factors. The number of factors was kept at five however as they explained a significant proportion of the variance whilst not being too large. A similar decision was made with keeping the total count of PCAs at 19.</p>
+<p>The data cleaning stage was informed by exploring the data. From the exploration stage it was clear that many of the columns were blank. These were removed from both the testing and training data. Additionally it was found that some rows contained variable observations that the majority of other rows did not. It was identified that these columns/variables were not used in the training dataset and would therefore not be needed in the training dataset either. They were removed from the dataset. The first seven columns were also removed from the data set as they were found to have no correlation with classe.</p>
+<p>The variance inflation factor (vif) was then used, as a preffered approach to correlation scores, to detect multicollinearity. Correlated variables could weight certain traits of an excercise above other equally important variables. These variables were removed had been removed.</p>
+<p>Plots of random combinations of two variables were then explored to see if there was evidence of non normally distrubted data. Non nomrally distributed data was found so all data was centred and scaled to produce z-scores which allowed for the normalisation of the data. This led to more accurate results within the non-parametic tests used for this project which assumed a normative distribution in the data.</p>
+<p>The process then went through a variable reduction process. The user was allowed to choose either PCA or factor analysis. Both lower the accuracy of the model on a limited capacity computer such as the one this model was written on which allows for more observations to be analysed in a reasonable time frame. For this project factor analysis was used as it was found to provide the most accurate results. If the computing power had been available no simplification process would have been used as this was found to produce even more accurate results.</p>
+<p>The factor analysis which aims to find the variables for hidden features (classes) was set to find 5 classes, the number of distinct classes in the training set. Checks on higher numbers of factors and their explanatory variance did find however that there was an argument to increasing the number of factors. The number of factors was kept at five however as they explained a significant proportion of the variance whilst not being so large to be computationally expensive. A similar decision was made with keeping the total count of PCAs at 19.</p>
 </div>
 <div id="data-analysis" class="section level2">
 <h2>Data analysis</h2>
 <p>Random forest, knn and data fusion were the supervised classification techniques used to predict classe. Boosting would also have been used though was too resource intensive an operation for my computer. Data fusion is a technique not covered in the class, but it was found to be an effective predictor, especially on smaller sample sizes. The default distance measure it uses to classify results,‘Manhattan’ was used as studies have shown other types have minimal effect on outcomes.</p>
-<p>The predictive models were then combined for a final predictive algorithm. This required transforming the results of the predictive model to dummy variables so they could be used as independent predictors. The model would have been unable to work if it had used the original, nominal classe letters.</p>
-<p>Cross validation was used in the packages where the trainControl function could be used. This meant that cross validation could be used for all models except the data fusion technique and including the end combination of models. K-folds cross validation was selected and k=2. K was set to 3 as even this would push the capability of my machine whilst minimising the risk of over fitting the model.</p>
-<p>To determine an out of sample error rate the training data set was split into a training, testing and combination. This approach meant that training data had data it could be tested on (the testing data set) and the final combination of models could also have it’s prediction tested (using the combination data set) in a confusion matrix.</p>
-<p>The next section is a copy of the script used to calculate the out of sample error.</p>
-<p>For the final run of the model the code was adapted so that all training data was used to calculate the model. A copy of this script has not been included here as it only slightly differs from the below code.</p>
+<p>The predictive models were then combined in a final predictive model. This required transforming the results of the predictive model to dummy variables so they could be used as independent predictors. The model would have been unable to work if it had used the original, nominal classe letters.</p>
+<p>Cross validation was used in the packages where the trainControl and train function could be used. This meant that cross validation could be used for all models except the data fusion technique and including the end combination of models. K-folds cross validation was selected and k=2. K was set to 2 as even this would push the capability of my machine whilst minimising the risk of over fitting the model.</p>
+<p>To determine an out of sample error rate the training data set was split into a training, testing and combination dataset. This approach meant that training data had data it could be tested on (the testing data set) and the final combination of models could also have predictions tested (using the combination data set) in a confusion matrix.</p>
+<p>For the final run of the model the code used to calculate the out of sample error was adapted so that all training data was used to calculate the model. A copy of this script has not been included here as it only slightly differs from the below code.</p>
 </div>
 <div id="script-to-calculate-out-of-sample-error" class="section level2">
 <h2>Script to calculate out of sample error</h2>
@@ -317,32 +316,32 @@ confusionMatrix(standardisedTrain[predictionMin:predictionMax,]$classe, rfPredic
 ##           Reference
 ## Prediction    A    B    C    D    E
 ##          A 1429    5    0    2    0
-##          B   16  899   26    1    1
-##          C    1   13  844   14    1
-##          D    0    2   18  812    7
+##          B   21  895   26    0    1
+##          C    0   15  843   14    1
+##          D    0    2   18  813    6
 ##          E    0    1    3    3  902
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9772          
-##                  95% CI : (0.9727, 0.9812)
-##     No Information Rate : 0.2892          
+##                Accuracy : 0.9764          
+##                  95% CI : (0.9718, 0.9804)
+##     No Information Rate : 0.29            
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.9711          
+##                   Kappa : 0.9701          
 ##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9882   0.9772   0.9473   0.9760   0.9901
-## Specificity            0.9980   0.9892   0.9929   0.9935   0.9983
-## Pos Pred Value         0.9951   0.9533   0.9668   0.9678   0.9923
-## Neg Pred Value         0.9952   0.9948   0.9886   0.9952   0.9978
-## Prevalence             0.2892   0.1840   0.1782   0.1664   0.1822
-## Detection Rate         0.2858   0.1798   0.1688   0.1624   0.1804
+## Sensitivity            0.9855   0.9749   0.9472   0.9772   0.9912
+## Specificity            0.9980   0.9882   0.9927   0.9938   0.9983
+## Pos Pred Value         0.9951   0.9491   0.9656   0.9690   0.9923
+## Neg Pred Value         0.9941   0.9943   0.9886   0.9954   0.9980
+## Prevalence             0.2900   0.1836   0.1780   0.1664   0.1820
+## Detection Rate         0.2858   0.1790   0.1686   0.1626   0.1804
 ## Detection Prevalence   0.2872   0.1886   0.1746   0.1678   0.1818
-## Balanced Accuracy      0.9931   0.9832   0.9701   0.9847   0.9942</code></pre>
+## Balanced Accuracy      0.9918   0.9816   0.9699   0.9855   0.9947</code></pre>
 <pre class="r"><code>#-- knn
 
 knnTrain = train(standardisedTrainWithoutClasse[trainingMin:trainingMax,], standardisedTrain[trainingMin:trainingMax,]$classe,trControl=train_control,  method='knn')
@@ -352,33 +351,33 @@ confusionMatrix(knnPrediction,standardisedTrain[predictionMin:predictionMax,]$cl
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1378   58   17    6    9
-##          B   20  761   25    2   33
-##          C   13   87  779   79   43
-##          D   22   26   43  743   12
-##          E    3   11    9    9  812
+##          A 1375   57   19    4   10
+##          B   20  770   25    3   31
+##          C   14   80  782   77   34
+##          D   24   24   38  747   11
+##          E    3   12    9    8  823
 ## 
 ## Overall Statistics
-##                                          
-##                Accuracy : 0.8946         
-##                  95% CI : (0.8858, 0.903)
-##     No Information Rate : 0.2872         
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
-##                                          
-##                   Kappa : 0.8666         
-##  Mcnemar's Test P-Value : &lt; 2.2e-16      
+##                                           
+##                Accuracy : 0.8994          
+##                  95% CI : (0.8907, 0.9076)
+##     No Information Rate : 0.2872          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.8726          
+##  Mcnemar's Test P-Value : &lt; 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9596   0.8070   0.8923   0.8856   0.8933
-## Specificity            0.9747   0.9803   0.9462   0.9752   0.9922
-## Pos Pred Value         0.9387   0.9049   0.7782   0.8783   0.9621
-## Neg Pred Value         0.9836   0.9562   0.9765   0.9769   0.9767
+## Sensitivity            0.9575   0.8165   0.8958   0.8903   0.9054
+## Specificity            0.9747   0.9805   0.9503   0.9767   0.9922
+## Pos Pred Value         0.9386   0.9069   0.7923   0.8851   0.9626
+## Neg Pred Value         0.9827   0.9583   0.9773   0.9779   0.9793
 ## Prevalence             0.2872   0.1886   0.1746   0.1678   0.1818
-## Detection Rate         0.2756   0.1522   0.1558   0.1486   0.1624
-## Detection Prevalence   0.2936   0.1682   0.2002   0.1692   0.1688
-## Balanced Accuracy      0.9672   0.8936   0.9193   0.9304   0.9427</code></pre>
+## Detection Rate         0.2750   0.1540   0.1564   0.1494   0.1646
+## Detection Prevalence   0.2930   0.1698   0.1974   0.1688   0.1710
+## Balanced Accuracy      0.9661   0.8985   0.9230   0.9335   0.9488</code></pre>
 <pre class="r"><code>#--boosting
 # 
 # modFit = train(classe ~., method = &quot;gbm&quot;, data = standardisedTrain[trainingMin:trainingMax,], verbose = FALSE)
@@ -446,39 +445,39 @@ tapply(imp.rec$Classe, imp.rec$imp.PL, summary)</code></pre>
 ## 
 ## $`1`
 ##    A    B    C    D    E 
-## 1441  914  901  852  892</code></pre>
+## 1440  912  906  850  892</code></pre>
 <pre class="r"><code>confusionMatrix(imp.rec[imp.rec$imp.PL ==  1,]$Classe,standardisedTrain[predictionMin:predictionMax,]$classe)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1415   18    6    1    1
-##          B    8  888   11    0    7
-##          C    3   35  834   23    6
-##          D    8    2   19  812   11
-##          E    2    0    3    3  884
+##          A 1412   19    7    1    1
+##          B    9  883   13    0    7
+##          C    2   39  835   24    6
+##          D   11    2   17  811    9
+##          E    2    0    1    3  886
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.9666          
-##                  95% CI : (0.9612, 0.9714)
-##     No Information Rate : 0.2872          
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-##                                           
-##                   Kappa : 0.9577          
-##  Mcnemar's Test P-Value : 3.649e-05       
+##                                         
+##                Accuracy : 0.9654        
+##                  95% CI : (0.96, 0.9703)
+##     No Information Rate : 0.2872        
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16     
+##                                         
+##                   Kappa : 0.9562        
+##  Mcnemar's Test P-Value : 2.38e-06      
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9854   0.9417   0.9553   0.9678   0.9725
-## Specificity            0.9927   0.9936   0.9838   0.9904   0.9980
-## Pos Pred Value         0.9820   0.9716   0.9256   0.9531   0.9910
-## Neg Pred Value         0.9941   0.9865   0.9905   0.9935   0.9939
+## Sensitivity            0.9833   0.9364   0.9565   0.9666   0.9747
+## Specificity            0.9921   0.9929   0.9828   0.9906   0.9985
+## Pos Pred Value         0.9806   0.9682   0.9216   0.9541   0.9933
+## Neg Pred Value         0.9933   0.9853   0.9907   0.9933   0.9944
 ## Prevalence             0.2872   0.1886   0.1746   0.1678   0.1818
-## Detection Rate         0.2830   0.1776   0.1668   0.1624   0.1768
-## Detection Prevalence   0.2882   0.1828   0.1802   0.1704   0.1784
-## Balanced Accuracy      0.9890   0.9676   0.9695   0.9791   0.9853</code></pre>
+## Detection Rate         0.2824   0.1766   0.1670   0.1622   0.1772
+## Detection Prevalence   0.2880   0.1824   0.1812   0.1700   0.1784
+## Balanced Accuracy      0.9877   0.9646   0.9696   0.9786   0.9866</code></pre>
 <pre class="r"><code>dataFusionResults = imp.rec[imp.rec$imp.PL ==  1,]$Classe
 
 
@@ -495,7 +494,7 @@ colnames(rfOrigianlPredDummies) = paste(colnames(rfOrigianlPredDummies), &quot;r
 colnames(dfOrigianlPredDummies) = paste(colnames(dfOrigianlPredDummies), &quot;df&quot;, sep = &quot;_&quot;)
 preDF = data.frame(dfOrigianlPredDummies, rfOrigianlPredDummies, classe = standardisedTrain[predictionMin:predictionMax, &quot;classe&quot;])
 combFit = train(classe ~., method = &quot;rf&quot;, data=preDF, trControl=train_control, verbose = FALSE)</code></pre>
-<p>This was the end of the code for the</p>
+<p>Above is the the end of the code required for the prediction of classe in the testing dataset. The remainder of code is for the creation of out of sample rror using the combination dataset.</p>
 <pre class="r"><code>#boostingPrediction2 = dummy_cols(predict(modFit,standardisedTrainWithoutClasse[combinationMin:combinationMax,]))[,-1]
 knnPrediction2 = dummy_cols(predict(knnTrain,standardisedTrainWithoutClasse[combinationMin:combinationMax,]))[,-1]
 rfPrediction2 = dummy_cols(predict(modelFitRF, standardisedTrainWithoutClasse[combinationMin:combinationMax,]))[,-1]
@@ -520,33 +519,33 @@ confusionMatrix(combPred,standardisedTrain[combinationMin:combinationMax,]$class
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1441    7    0    4    0
-##          B   16  930   25    1    0
-##          C    0   11  830   16    3
-##          D    4    2   17  798    4
-##          E    1    1    0    6  883
+##          A 1442    7    0    4    0
+##          B   16  928   24    0    0
+##          C    0   12  831   16    0
+##          D    3    4   13  795    2
+##          E    1    0    4   10  888
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9764          
-##                  95% CI : (0.9718, 0.9804)
+##                Accuracy : 0.9768          
+##                  95% CI : (0.9722, 0.9808)
 ##     No Information Rate : 0.2924          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.9701          
+##                   Kappa : 0.9706          
 ##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9856   0.9779   0.9518   0.9673   0.9921
-## Specificity            0.9969   0.9896   0.9927   0.9935   0.9981
-## Pos Pred Value         0.9924   0.9568   0.9651   0.9673   0.9910
-## Neg Pred Value         0.9941   0.9948   0.9899   0.9935   0.9983
+## Sensitivity            0.9863   0.9758   0.9530   0.9636   0.9978
+## Specificity            0.9969   0.9901   0.9932   0.9947   0.9964
+## Pos Pred Value         0.9924   0.9587   0.9674   0.9731   0.9834
+## Neg Pred Value         0.9944   0.9943   0.9901   0.9928   0.9995
 ## Prevalence             0.2924   0.1902   0.1744   0.1650   0.1780
-## Detection Rate         0.2882   0.1860   0.1660   0.1596   0.1766
-## Detection Prevalence   0.2904   0.1944   0.1720   0.1650   0.1782
-## Balanced Accuracy      0.9913   0.9838   0.9723   0.9804   0.9951</code></pre>
+## Detection Rate         0.2884   0.1856   0.1662   0.1590   0.1776
+## Detection Prevalence   0.2906   0.1936   0.1718   0.1634   0.1806
+## Balanced Accuracy      0.9916   0.9830   0.9731   0.9792   0.9971</code></pre>
 </div>
 </div>
 
