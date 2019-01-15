@@ -25,7 +25,7 @@ The factor analysis which aims to find the variables for hidden features (classe
 
 ##Data analysis
 
-Random forest, knn and data fusion were the supervised classification techniques used to predict classe. Boosting would also have been used though was too resource intensive an operation for my computer. Data fusion is a technique not covered in the class, but it was found to be an effective predictor, especially on smaller sample sizes. The default distance measure it uses to classify results,'Manhattan' was used as studies have shown other types have minimal effect on outcomes. 
+Random forest, knn and data fusion were the supervised classification techniques used to predict classe. Boosting would also have been used though was too resource intensive an operation for my computer. Data fusion is a technique not covered in the class, but it was found to be an effective predictor, especially on smaller sample sizes. The default distance measure it uses to classify results,'Manhattan' was used as studies have shown other types have minimal effect on outcomes.  
 
 The predictive models were then combined in a final predictive model. This required transforming the results of the predictive model to dummy variables so they could be used as independent predictors. The model would have been unable to work if it had used the original, nominal classe letters.
 
@@ -34,6 +34,8 @@ Cross validation was used in the packages where the trainControl and train funct
 To determine an out of sample error rate the training data set was split into a training, testing and combination dataset. This approach meant that training data had data it could be tested on (the testing data set) and the final combination of models could also have predictions tested (using the combination data set) in a confusion matrix.
 
 For the final run of the model the code used to calculate the out of sample error was adapted so that all training data was used to calculate the model. A copy of this script has not been included here as it only slightly differs from the below code.
+
+Based on the results of the out of sample report I believe that the accuracy on the test dataset should be at least 97%. 
 
 
 ##Script to calculate out of sample error
