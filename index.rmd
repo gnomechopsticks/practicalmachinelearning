@@ -14,13 +14,13 @@ There are two process that are used in this project that were not covered in the
 
 The data cleaning stage was informed by exploring the data. From the exploration stage it was clear that many of the columns were blank. These were removed from both the testing and training data. Additionally it was found that some rows contained variable observations that the majority of other rows did not. It was identified that these columns/variables were not used in the training dataset and would therefore not be needed in the training dataset either. They were removed from the dataset. The first seven columns were also removed from the data set as they were found to have no correlation with classe.
 
-The variance inflation factor (vif) was then used, as a preffered approach to correlation scores, to detect multicollinearity. Correlated variables could weight certain traits of an excercise above other equally important variables. These variables were removed had been removed.
+The variance inflation factor (vif) was then used, as a preffered approach to correlation scores, to detect multicollinearity. Correlated variables could weight certain traits of an excercise above other equally important variables. These variables were removed.
 
-Plots of random combinations of two variables were then explored to see if there was evidence of non normally distrubted data. Non nomrally distributed data was found so all data was  centred and scaled to produce z-scores which allowed for the normalisation of the data. This led to more accurate results within the non-parametic tests used for this project which assumed a normative distribution in the data. 
+Plots of random combinations of two variables were then explored to see if there was evidence of non normally distrubted data. Non nomrally distributed data was found so all data was centred and scaled to produce z-scores which allowed for the normalisation of the data. This led to more accurate results within the non-parametic tests used for this project which assumed a normative distribution in the data.
 
 The process then went through a variable reduction process. The user was allowed to choose either PCA or factor analysis. Both lower the accuracy of the model on a limited capacity computer such as the one this model was written on which allows for more observations to be analysed in a reasonable time frame. For this project factor analysis was used as it was found to provide the most accurate results. If the computing power had been available no simplification process would have been used as this was found to produce even more accurate results.
 
-The factor analysis which aims to find the variables for hidden features (classes) was set to find 5 classes, the number of distinct classes in the training set. Checks on higher numbers of factors and their explanatory variance did find however that there was an argument to increasing the number of factors. The number of factors was kept at five however as they explained a significant proportion of the variance whilst not being so large to be computationally expensive. A similar decision was made with keeping the total count of PCAs at 19.
+The factor analysis which aims to find the variables for hidden features (classes) was set to find 5 classes, the number of distinct classes in the training set. Factor analysis works by finding hidden connections between variables, in this case the five different types of exercise. Checks on higher numbers of factors and their explanatory variance did find however that there was an argument to increasing the number of factors. The number of factors was kept at five however as they explained a significant proportion of the variance whilst not being so large to be computationally expensive. A similar decision was made with keeping the total count of PCAs at 19.
 
 
 ##Data analysis
@@ -31,14 +31,14 @@ The predictive models were then combined in a final predictive model. This requi
 
 Cross validation was used in the packages where the trainControl and train function could be used. This meant that cross validation could be used for all models except the data fusion technique and including the end combination of models. K-folds cross validation was selected and k=2. K was set to 2 as even this would push the capability of my machine whilst minimising the risk of over fitting the model.
 
-To determine an out of sample error rate the training data set was split into a training, testing and combination dataset. This approach meant that training data had data it could be tested on (the testing data set) and the final combination of models could also have predictions tested (using the combination data set) in a confusion matrix.
+To determine an out of sample error rate the training data set was split into a training, testing and combination datasets. This approach meant that training data had data it could be tested on (the testing data set) and the final combination of models could also have predictions tested (using the combination data set) in a confusion matrix.
 
-For the final run of the model the code used to calculate the out of sample error was adapted so that all training data was used to calculate the model. A copy of this script has not been included here as it only slightly differs from the below code.
+For the final run of the model (when predicting the 20 observations) the code used to calculate the out of sample error was adapted so that all training data was used to calculate the model. A copy of this script has not been included here as it is a reduced version of the code below as the only data analysis approach used was random forest. The models that were taken out for the final prediction were removed as they took too much memory space for my computer.  
 
 Based on the results of the out of sample report I believe that the accuracy on the test dataset should be at least 97%. 
 
 
-##Script to calculate out of sample error
+##Script including models and data reduction methods that were explored for their usefulness though not included in the final model.
 
 
 ```{r}
