@@ -307,5 +307,5 @@ pca <- prcomp(train2[,2:53],scale=TRUE,retx=TRUE)
 std_dev <- pca$sdev
 var <- std_dev^2
 prop_var <- var/sum(var)
-plot(cumsum(prop_var),xlab = "Principal Component", ylab = "Cumulative Proportion of Variance Explained",type="b")
+plot(cumsum(prop_var),xlab = "Principal Component", ylab = "Cumulative Proportion of Variance Explained",type="b") 
 
