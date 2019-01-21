@@ -316,33 +316,33 @@ confusionMatrix(standardisedTrain[predictionMin:predictionMax,]$classe, rfPredic
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1429    5    0    2    0
-##          B   18  901   23    0    1
-##          C    1   12  847   13    0
-##          D    1    1   17  814    6
-##          E    0    1    2    3  903
+##          A 1425    5    0    5    1
+##          B   37  884   20    0    2
+##          C    3   20  844    6    0
+##          D    3    0   39  791    6
+##          E    0    0    5    2  902
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.9788          
-##                  95% CI : (0.9744, 0.9826)
-##     No Information Rate : 0.2898          
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-##                                           
-##                   Kappa : 0.9732          
-##  Mcnemar's Test P-Value : NA              
+##                                          
+##                Accuracy : 0.9692         
+##                  95% CI : (0.964, 0.9738)
+##     No Information Rate : 0.2936         
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+##                                          
+##                   Kappa : 0.961          
+##  Mcnemar's Test P-Value : NA             
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9862   0.9793   0.9528   0.9784   0.9923
-## Specificity            0.9980   0.9897   0.9937   0.9940   0.9985
-## Pos Pred Value         0.9951   0.9555   0.9702   0.9702   0.9934
-## Neg Pred Value         0.9944   0.9953   0.9898   0.9957   0.9983
-## Prevalence             0.2898   0.1840   0.1778   0.1664   0.1820
-## Detection Rate         0.2858   0.1802   0.1694   0.1628   0.1806
+## Sensitivity            0.9707   0.9725   0.9295   0.9838   0.9901
+## Specificity            0.9969   0.9856   0.9929   0.9886   0.9983
+## Pos Pred Value         0.9923   0.9374   0.9668   0.9428   0.9923
+## Neg Pred Value         0.9879   0.9938   0.9845   0.9969   0.9978
+## Prevalence             0.2936   0.1818   0.1816   0.1608   0.1822
+## Detection Rate         0.2850   0.1768   0.1688   0.1582   0.1804
 ## Detection Prevalence   0.2872   0.1886   0.1746   0.1678   0.1818
-## Balanced Accuracy      0.9921   0.9845   0.9732   0.9862   0.9954</code></pre>
+## Balanced Accuracy      0.9838   0.9790   0.9612   0.9862   0.9942</code></pre>
 <pre class="r"><code>#-- knn
 
 knnTrain = train(standardisedTrainWithoutClasse[trainingMin:trainingMax,], standardisedTrain[trainingMin:trainingMax,]$classe,trControl=train_control,  method='knn')
@@ -352,33 +352,33 @@ confusionMatrix(knnPrediction,standardisedTrain[predictionMin:predictionMax,]$cl
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1375   54   15    5    9
-##          B   20  771   27    3   30
-##          C   14   85  784   72   37
-##          D   24   22   35  752   13
-##          E    3   11   12    7  820
+##          A 1375   57   21    7   10
+##          B   19  756   27    2   35
+##          C   13   93  775   81   45
+##          D   24   27   40  744   11
+##          E    5   10   10    5  808
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9004          
-##                  95% CI : (0.8918, 0.9086)
+##                Accuracy : 0.8916          
+##                  95% CI : (0.8827, 0.9001)
 ##     No Information Rate : 0.2872          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.8739          
+##                   Kappa : 0.8628          
 ##  Mcnemar's Test P-Value : &lt; 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9575   0.8176   0.8981   0.8963   0.9021
-## Specificity            0.9767   0.9803   0.9496   0.9774   0.9919
-## Pos Pred Value         0.9431   0.9060   0.7903   0.8889   0.9613
-## Neg Pred Value         0.9828   0.9585   0.9778   0.9791   0.9785
+## Sensitivity            0.9575   0.8017   0.8877   0.8868   0.8889
+## Specificity            0.9733   0.9795   0.9438   0.9755   0.9927
+## Pos Pred Value         0.9354   0.9011   0.7696   0.8794   0.9642
+## Neg Pred Value         0.9827   0.9551   0.9755   0.9771   0.9757
 ## Prevalence             0.2872   0.1886   0.1746   0.1678   0.1818
-## Detection Rate         0.2750   0.1542   0.1568   0.1504   0.1640
-## Detection Prevalence   0.2916   0.1702   0.1984   0.1692   0.1706
-## Balanced Accuracy      0.9671   0.8989   0.9238   0.9369   0.9470</code></pre>
+## Detection Rate         0.2750   0.1512   0.1550   0.1488   0.1616
+## Detection Prevalence   0.2940   0.1678   0.2014   0.1692   0.1676
+## Balanced Accuracy      0.9654   0.8906   0.9158   0.9311   0.9408</code></pre>
 <pre class="r"><code>#--boosting
 # 
 # modFit = train(classe ~., method = &quot;gbm&quot;, data = standardisedTrain[trainingMin:trainingMax,], verbose = FALSE)
@@ -446,39 +446,39 @@ tapply(imp.rec$Classe, imp.rec$imp.PL, summary)</code></pre>
 ## 
 ## $`1`
 ##    A    B    C    D    E 
-## 1440  913  906  849  892</code></pre>
+## 1441  918  905  847  889</code></pre>
 <pre class="r"><code>confusionMatrix(imp.rec[imp.rec$imp.PL ==  1,]$Classe,standardisedTrain[predictionMin:predictionMax,]$classe)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1413   19    7    1    0
-##          B   10  883   14    0    6
-##          C    2   39  834   25    6
-##          D   10    2   17  809   11
-##          E    1    0    1    4  886
+##          A 1413   18    8    1    1
+##          B   10  885   14    0    9
+##          C    3   38  831   24    9
+##          D    8    2   17  810   10
+##          E    2    0    3    4  880
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.965           
-##                  95% CI : (0.9595, 0.9699)
+##                Accuracy : 0.9638          
+##                  95% CI : (0.9582, 0.9688)
 ##     No Information Rate : 0.2872          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.9557          
-##  Mcnemar's Test P-Value : 7.23e-06        
+##                   Kappa : 0.9542          
+##  Mcnemar's Test P-Value : 2.361e-05       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9840   0.9364   0.9553   0.9642   0.9747
-## Specificity            0.9924   0.9926   0.9826   0.9904   0.9985
-## Pos Pred Value         0.9812   0.9671   0.9205   0.9529   0.9933
-## Neg Pred Value         0.9935   0.9853   0.9905   0.9928   0.9944
+## Sensitivity            0.9840   0.9385   0.9519   0.9654   0.9681
+## Specificity            0.9921   0.9919   0.9821   0.9911   0.9978
+## Pos Pred Value         0.9806   0.9641   0.9182   0.9563   0.9899
+## Neg Pred Value         0.9935   0.9858   0.9897   0.9930   0.9929
 ## Prevalence             0.2872   0.1886   0.1746   0.1678   0.1818
-## Detection Rate         0.2826   0.1766   0.1668   0.1618   0.1772
-## Detection Prevalence   0.2880   0.1826   0.1812   0.1698   0.1784
-## Balanced Accuracy      0.9882   0.9645   0.9689   0.9773   0.9866</code></pre>
+## Detection Rate         0.2826   0.1770   0.1662   0.1620   0.1760
+## Detection Prevalence   0.2882   0.1836   0.1810   0.1694   0.1778
+## Balanced Accuracy      0.9881   0.9652   0.9670   0.9783   0.9829</code></pre>
 <pre class="r"><code>dataFusionResults = imp.rec[imp.rec$imp.PL ==  1,]$Classe
 
 
@@ -520,33 +520,69 @@ confusionMatrix(combPred,standardisedTrain[combinationMin:combinationMax,]$class
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1441    7    1    4    0
-##          B   16  928   22    1    0
-##          C    0   13  831   16    0
-##          D    4    3   15  794    2
-##          E    1    0    3   10  888
+##          A 1442   11    2    1    0
+##          B   19  926   30    0    0
+##          C    0   12  811   19    0
+##          D    0    1   26  799    7
+##          E    1    1    3    6  883
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9764          
-##                  95% CI : (0.9718, 0.9804)
+##                Accuracy : 0.9722          
+##                  95% CI : (0.9673, 0.9766)
 ##     No Information Rate : 0.2924          
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##     P-Value [Acc &gt; NIR] : &lt; 2e-16         
 ##                                           
-##                   Kappa : 0.9701          
-##  Mcnemar's Test P-Value : NA              
+##                   Kappa : 0.9648          
+##  Mcnemar's Test P-Value : 0.02913         
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9856   0.9758   0.9530   0.9624   0.9978
-## Specificity            0.9966   0.9904   0.9930   0.9943   0.9966
-## Pos Pred Value         0.9917   0.9597   0.9663   0.9707   0.9845
-## Neg Pred Value         0.9941   0.9943   0.9901   0.9926   0.9995
+## Sensitivity            0.9863   0.9737   0.9300   0.9685   0.9921
+## Specificity            0.9960   0.9879   0.9925   0.9919   0.9973
+## Pos Pred Value         0.9904   0.9497   0.9632   0.9592   0.9877
+## Neg Pred Value         0.9944   0.9938   0.9853   0.9938   0.9983
 ## Prevalence             0.2924   0.1902   0.1744   0.1650   0.1780
-## Detection Rate         0.2882   0.1856   0.1662   0.1588   0.1776
-## Detection Prevalence   0.2906   0.1934   0.1720   0.1636   0.1804
-## Balanced Accuracy      0.9911   0.9831   0.9730   0.9783   0.9972</code></pre>
+## Detection Rate         0.2884   0.1852   0.1622   0.1598   0.1766
+## Detection Prevalence   0.2912   0.1950   0.1684   0.1666   0.1788
+## Balanced Accuracy      0.9912   0.9808   0.9613   0.9802   0.9947</code></pre>
+</div>
+</div>
+<div id="additional-notes-from-looking-at-other-peoples-work" class="section level1">
+<h1>Additional notes from looking at other peoples work</h1>
+<div id="information-on-the-difference-between-sapply-and-apply" class="section level3">
+<h3>information on the difference between sapply and apply</h3>
+<p>train.raw &lt;- read.csv(“C:\Users\rhart\OneDrive\Documents\DataPracticalMachineLearning\rawTrain.csv”) vars = names(train.raw) missing.values.count&lt;-sapply(train.raw[vars],function(x)sum(is.na(x))) #Counts number of rows with NA missing.values.count&lt;-apply(train.raw[vars],2,function(x)sum(is.na(x))) #Does the same as above though uses apply and the 2 dimenion columns rather than 1 for the rows,ie column headers tapply #is used when you would like to create a pivot tabl, you can specify price for your value and another column for your category, you could also specify the functino to be calcualted. You can also create a c vector containing multiple column headings to slice by a second dimension. install.packages(“corrplot”) library(corrplot) ?corrplot</p>
+</div>
+<div id="this-splits-the-dataset-into-training-and-testing-by-70" class="section level3">
+<h3>This splits the dataset into training and testing by 70%</h3>
+<p>set.seed(100003) inTrain &lt;- createDataPartition(train.clean$classe, p = 0.7, list = FALSE) train.data &lt;- train.clean[inTrain, ] # training data set test.data &lt;- train.clean[-inTrain, ] # testing data set dim(train.data) #Dimension</p>
+</div>
+<div id="this-presents-a-fancy-random-forest" class="section level3">
+<h3>This presents a fancy random forest</h3>
+<p>library(caret) set.seed(100003) class.tree.model &lt;- train(classe~., data=train.data, method=“rpart”, trControl=trControl) fancyRpartPlot(class.tree.model$finalModel)</p>
+</div>
+<div id="shows-a-graph-of-how-well-a-random-forest-model-calcualtes-based-on-more-predicutors-being-randomly-added-to-the-x-axis" class="section level3">
+<h3>shows a graph of how well a random forest model calcualtes based on more predicutors being randomly added to the x axis</h3>
+<p>plot(rand.forest.model,main=“Accuracy of Random forest model by number of predictors”)</p>
+<p>library(dplyr) library(caret) library(rpart) training &lt;- read.csv(“C:\Users\rhart\OneDrive\Documents\DataPracticalMachineLearning\rawTrain.csv”) testing &lt;- read.csv(“C:\Users\rhart\OneDrive\Documents\DataPracticalMachineLearning\rawTest.csv”) colNA_list &lt;- training %&gt;% summarize_all(funs(sum(is.na(.)) / length(.))) train_ss &lt;- training[,colNA_list == 0] ~Remove Factor columns then add ‘classe’ factor back in tnf &lt;- Filter(Negate(is.factor), train_ss) tnf &lt;- cbind(tnf,train_ss[,93]) names(tnf)[57] &lt;- “classe” ~Remove Identification columns tn &lt;- tnf[,-c(1:3)] ncol(tn) ~Much better way of viweing a summmary of the different fields str(train.raw) #Structure</p>
+</div>
+<div id="identifies-columns-that-have-more-than-70-na-values-and-removes-them" class="section level3">
+<h3>Identifies columns that have more than 70% na values and removes them</h3>
+<p>vars&lt;-names(train.raw) #Column names missing.values.count&lt;-sapply(train.raw[vars],function(x)sum(is.na(x))) #Counts number of rows with NA missing.values.varnames&lt;-names(which(missing.values.count&gt;=0.7*nrow(train.raw))) #removing variables with more than 70% of missings ignore&lt;-union(ignore,missing.values.varnames) length(ignore) vars.keep &lt;-setdiff(vars,ignore) train.clean &lt;- train.raw [,vars.keep] dim(train.clean) #Dimension</p>
+</div>
+<div id="creates-a-correlation-plot-of-different-variables" class="section level3">
+<h3>creates a correlation plot of different variables</h3>
+<p>library(corrplot); correlations &lt;- cor(train.clean[,-c(32)]) #all variables except target variable classe corrplot(correlations, type = “upper”, order = “hclust”, tl.cex = 0.5)</p>
+</div>
+<div id="from-the-looks-of-it-this-cleaning-process-provides-the-most-accurate-version-for-the-project" class="section level3">
+<h3>from the looks of it this cleaning process provides the most accurate version for the project</h3>
+<p>~Filter out NA columns colNA_list &lt;- training %&gt;% summarize_all(funs(sum(is.na(.)) / length(.))) train_ss &lt;- training[,colNA_list == 0] ~Remove Factor columns then add ‘classe’ factor back in tnf &lt;- Filter(Negate(is.factor), train_ss) tnf &lt;- cbind(tnf,train_ss[,93]) names(tnf)[57] &lt;- “classe” ~Remove Identification columns tn &lt;- tnf[,-c(1:3)]</p>
+</div>
+<div id="a-good-way-to-plot-pca-variance" class="section level3">
+<h3>A good way to plot pca variance</h3>
+<p>pca &lt;- prcomp(train2[,2:53],scale=TRUE,retx=TRUE) std_dev &lt;- pca$sdev var &lt;- std_dev^2 prop_var &lt;- var/sum(var) plot(cumsum(prop_var),xlab = “Principal Component”, ylab = “Cumulative Proportion of Variance Explained”,type=“b”)</p>
 </div>
 </div>
 
