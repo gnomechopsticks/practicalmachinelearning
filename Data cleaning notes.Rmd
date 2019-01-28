@@ -1,0 +1,53 @@
+locationOfDownloandedFile = "C:/Users/rhart/OneDrive/Documents/DataPracticalMachineLearning/test.csv"
+
+
+file = "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+download.file(file, locationOfDownloandedFile)
+data = read.csv("C:/Users/rhart/OneDrive/Documents/DataPracticalMachineLearning/test.csv")
+
+
+install.packages("curl")
+library(curl)
+
+
+
+library(openxlsx)
+install.packages("xlsx")
+library(xlsx)
+file = "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FDATA.gov_NGAP.xlsx"
+locationOfDownloandedFile = "C:/Users/rhart/OneDrive/Documents/DataPracticalMachineLearning/test.xlsx"
+download.file(file, locationOfDownloandedFile)
+"rows 18-23 and columns 7-15"
+data = read.xlsx(locationOfDownloandedFile, 1, header = TRUE)
+dat = data[18:23, 7:15]
+sum(dat$Zip*dat$Ext,na.rm=T)
+
+
+
+
+file = "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Frestaurants.xml"
+locationOfDownloandedFile = "C:/Users/rhart/OneDrive/Documents/DataPracticalMachineLearning/test.xml"
+download.file(file, locationOfDownloandedFile)
+require(XML)
+data <- xmlParse(locationOfDownloandedFile)
+xml_data <- xmlToList(data)
+
+
+
+file = "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
+locationOfDownloandedFile = "C:/Users/rhart/OneDrive/Documents/DataPracticalMachineLearning/test2.csv"
+download.file(file, locationOfDownloandedFile)
+data = read.xlsx(locationOfDownloandedFile)
+
+
+
+class(data)
+summary(data$FES)
+
+class(file)
+file = data.frame(file)
+table(file$VAL)
+
+
+
+
